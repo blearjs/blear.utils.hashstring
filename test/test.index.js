@@ -7,29 +7,39 @@
 
 'use strict';
 
-var image = require('../src/index.js');
+var hashstring = require('../src/index.js');
 
 describe('index.js', function () {
-    it('.supportWebp', function (done) {
-        image.supportWebp(function (supported) {
-            console.log('supported webp', supported);
-            expect(typeof supported).toEqual('boolean');
-            done();
+    it('.parse', function (done) {
+        var ret = hashstring.parse('/a/b/c?x=1&y=2&z=3');
+
+        expect(ret.path).toEqual('/a/b/c?x=1&y=2&z=3');
+        expect(ret.pathname).toEqual('/a/b/c');
+        expect(ret.query).toEqual({
+            x: '1',
+            y: '2',
+            z: '3'
         });
+        done();
     });
 
-    it('.qiniuWebp', function () {
-        expect(image.qiniuWebp('png?n=172&imageView2/2/format/webp'))
-            .toEqual('png?n=172&imageView2/2/format/webp');
-        expect(image.qiniuWebp('png?n=172&imageView2/2/format/jepg'))
-            .toEqual('png?n=172&imageView2/2/format/webp');
-        expect(image.qiniuWebp('png?n=172&imageView2/2/'))
-            .toEqual('png?n=172&imageView2/2/format/webp');
-        expect(image.qiniuWebp('png?n=172&imageView2/2/w/100'))
-            .toEqual('png?n=172&imageView2/2/w/100/format/webp');
-        expect(image.qiniuWebp('png?n=172&imageView2/2/w/100/h/100/q/90/ignore-error/1'))
-            .toEqual('png?n=172&imageView2/2/w/100/h/100/q/90/ignore-error/1/format/webp');
-        expect(image.qiniuWebp('png'))
-            .toEqual('png?imageView2/2/format/webp');
+    it('.stringify', function (done) {
+        var ret = hashstring.stringify({
+            path: '/a/b/c',
+            query: {
+                x: 1,
+                y: 2,
+                z: 3
+            },
+            querystring: 'p=1&k=2&g=3'
+        });
+
+        expect(ret).toMatch(/^\/a\/b\/c/);
+        expect(ret).toMatch(/\?/);
+        expect(ret).not.toMatch(/x=1/);
+        expect(ret).not.toMatch(/y=2/);
+        expect(ret).not.toMatch(/z=3/);
+        expect(ret).toMatch(/\?p=1&k=2&g=3/);
+        done();
     });
 });
