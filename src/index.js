@@ -1,6 +1,6 @@
 'use strict';
 
-var url =         require('blear.utils.url');
+var url = require('blear.utils.url');
 var querystring = require('blear.utils.querystring');
 
 
@@ -34,10 +34,18 @@ exports.parse = function (hashstring) {
 /**
  * 字符串化
  * @param obj {object}
+ * @param obj.path {String}
+ * @param obj.pathname {String}
+ * @param obj.querystring {String}
+ * @param obj.query {String|Object}
  * @returns {string}
  */
 exports.stringify = function (obj) {
+    if (obj.path) {
+        return obj.path;
+    }
+
     obj.querystring = obj.querystring || querystring.stringify(obj.query);
-    obj.path = obj.path || '/';
-    return obj.path + (obj.querystring ? '?' : '') + obj.querystring
+    obj.pathname = obj.pathname || '/';
+    return obj.pathname + (obj.querystring ? '?' : '') + obj.querystring
 };

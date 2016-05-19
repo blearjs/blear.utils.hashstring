@@ -25,7 +25,7 @@ describe('index.js', function () {
 
     it('.stringify', function (done) {
         var ret = hashstring.stringify({
-            path: '/a/b/c',
+            pathname: '/a/b/c',
             query: {
                 x: 1,
                 y: 2,
