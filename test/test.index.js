@@ -23,6 +23,14 @@ describe('index.js', function () {
         done();
     });
 
+    it('.stringify', function () {
+        var ret = hashstring.stringify({
+            path: '/'
+        });
+
+        expect(ret).toEqual('/');
+    });
+
     it('.stringify', function (done) {
         var ret = hashstring.stringify({
             pathname: '/a/b/c',
